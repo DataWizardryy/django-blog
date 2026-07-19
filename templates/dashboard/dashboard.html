@@ -1,0 +1,42 @@
+{% extends 'blog_main/layout.html' %}
+
+{% block content %}
+
+<div class="row pt-5">
+
+    {% include 'blog_main/sidebar.html' %}
+
+    <div class="col-md-9">
+        <div class="text-end mb-3">
+            You are logged in as <strong>{{ user.username }}</strong>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <div class="card shadow-sm">
+                    <div class="card-header text-center fw-bold">
+                        All Categories
+                    </div>
+                    <div class="card-body">
+                        <h2 class="text-center">{{ category_count }}</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <div class="card shadow-sm">
+                    <div class="card-header text-center fw-bold">
+                        All Posts
+                    </div>
+                    <div class="card-body">
+                        <h2 class="text-center">{{ blogs_count }}</h2>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+
+{% endblock %}

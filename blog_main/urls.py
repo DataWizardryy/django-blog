@@ -29,6 +29,8 @@ urlpatterns = [
     path('blogs/<slug:slug>/', blogview.blogs, name='blog'),
     path('register/', blogview.register, name='register'),
     path('login/', blogview.login_view, name='login' ),
-    path('logout/', blogview.logout, name='logout')
+    path('logout/', blogview.logout, name='logout'),
+
+    path('dashboard/', include('dashboards.urls'))
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

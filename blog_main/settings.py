@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'sideBar',
     'crispy_forms',
     'crispy_bootstrap5',
+    'dashboards'
 ]
 
 MIDDLEWARE = [

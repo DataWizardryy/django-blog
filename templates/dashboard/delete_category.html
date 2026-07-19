@@ -1,0 +1,26 @@
+{% extends 'blog_main/layout.html' %}
+
+{% block content %}
+<div class="row pt-5">
+
+    {% include 'blog_main/sidebar.html' %}
+
+    <div class="col">
+        <div class="container text-center">
+            <h3>Are you sure you want to delete the <em>{{ category.category_name }}</em> category?</h3>
+
+            <form method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">
+                    Yes, Delete
+                </button>
+
+                <a href="{% url 'categories' %}" class="btn btn-secondary">
+                    Cancel
+                </a>
+            </form>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
