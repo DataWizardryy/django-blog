@@ -94,3 +94,31 @@ def add_post_view(request):
             return redirect('posts')
 
     return render(request, 'dashboard/add_post.html', {'form': form})
+
+def edit_post_view(request, pk):
+    post =get_object_or_404(Blogs, pk=pk)
+    form = PostForm(instance=post)
+    if request.method == 'POST':
+        form = PostForm(request.POST, instance=post)
+        if form.is_valid():
+            form.save()
+            return redirect('posts')
+
+    context ={
+        'form': form,
+        'post': post,
+
+    }
+    return render(request, 'dashboard/edit_post.html', context)
+
+
+def delete_post_view(request, pk):
+    post = get_object_or_404(Blogs, pk=pk)
+    if request.method == 'POST':
+        post.delete()
+        return redirect('posts')
+
+    context ={
+        'post': post
+    }
+    return render(request, 'dashboard/delete_post.html', context)

@@ -10,4 +10,6 @@ urlpatterns =[
 
     path('posts/', views.posts_view, name='posts'),
     path('posts/add/', views.add_post_view, name='add_post'),
+    path('posts/edit/<int:pk>', views.edit_post_view, name='edit_post'),
+    path('posts/delete/<int:pk>', views.delete_post_view, name='delete_post'),
 ]
