@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.template.defaultfilters import slugify
+
 from blogs.models import Category, Blogs
 from django.contrib.auth.decorators import login_required
 
-from .forms import CategoryForm
+from .forms import CategoryForm, PostForm
 
 
 # Create your views here.
@@ -63,3 +65,32 @@ def delete_category_view(request, pk):
     }
 
     return render(request, 'dashboard/delete_category.html', context)
+
+
+
+def posts_view(request):
+    posts = Blogs.objects.all()
+
+    context ={
+        'posts': posts,
+
+    }
+    return render(request, 'dashboard/posts.html', context)
+
+
+
+def add_post_view(request):
+    form = PostForm()
+
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user
+            post.slug = slugify(post.title)
+            post.save()
+
+            return redirect('posts')
+
+    return render(request, 'dashboard/add_post.html', {'form': form})

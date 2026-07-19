@@ -1,6 +1,6 @@
 from django import forms
 
-from blogs.models import Category
+from blogs.models import Category, Blogs
 
 
 class CategoryForm(forms.ModelForm):
@@ -9,4 +9,7 @@ class CategoryForm(forms.ModelForm):
         fields = '__all__'
 
 
-
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Blogs
+        fields = ('title', 'category', 'featured_image','short_description', 'blog_body', 'status', 'is_featured')
