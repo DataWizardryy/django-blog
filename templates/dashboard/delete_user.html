@@ -7,7 +7,8 @@
 
     <div class="col">
         <div class="container text-center">
-            <h3>Are you sure you want to delete <em>{{ post.title }}</em>?</h3>
+            {% if perms.auth.delete_user %}
+            <h3>Are you sure you want to delete the <em>{{ category.category_name }}</em> category?</h3>
 
             <form method="POST">
                 {% csrf_token %}
@@ -15,10 +16,13 @@
                     Yes, Delete
                 </button>
 
-                <a href="{% url 'posts' %}" class="btn btn-secondary">
+                <a href="{% url 'users' %}" class="btn btn-secondary">
                     Cancel
                 </a>
             </form>
+            {% else %}
+            You do not have permission to delete user
+            {% endif %}
         </div>
     </div>
 

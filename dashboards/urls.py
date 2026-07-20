@@ -12,4 +12,11 @@ urlpatterns =[
     path('posts/add/', views.add_post_view, name='add_post'),
     path('posts/edit/<int:pk>', views.edit_post_view, name='edit_post'),
     path('posts/delete/<int:pk>', views.delete_post_view, name='delete_post'),
+
+    path('users/', views.users_view, name='users'),
+    path('users/add/', views.add_user_view, name='add_user'),
+    path('users/edit/<int:pk>/', views.edit_user_view, name='edit_user'),
+    path('users/delete/<int:pk>/', views.delete_user_view, name='delete_user'),
+
+
 ]
