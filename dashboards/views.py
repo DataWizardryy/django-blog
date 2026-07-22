@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.contrib import auth
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.defaultfilters import slugify
 from django.contrib.auth.decorators import permission_required
@@ -77,6 +78,10 @@ def posts_view(request):
 
     }
     return render(request, 'dashboard/posts.html', context)
+
+def logout(request):
+    auth.logout(request)
+    return redirect('home')
 
 
 

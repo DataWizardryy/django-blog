@@ -1,9 +1,11 @@
 from  django.contrib import auth
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, redirect, get_object_or_404
 
 from .forms import RegistrationForm
-from .models import Blogs, Category
+from .models import Blogs, Category, Comments
+from django.db.models import Count
 
 
 # Create your views here.
@@ -18,14 +20,35 @@ def category_view(request, category_id):
     }
     return render(request, 'blog_main/post_by_category.html', context)
 
-
 def blogs(request, slug):
     single_post = get_object_or_404(Blogs, slug=slug, status='Published')
-    return render(request, 'blog_main/blogs.html', {'single_post':single_post})
 
 
+    if request.method == "POST":
 
-from django.db.models import Q
+        if not request.user.is_authenticated:
+            return redirect(f"{reverse('login')}?next={request.path}")
+
+        Comments.objects.create(
+            user=request.user,
+            blogs=single_post,
+            comment=request.POST.get('comment')
+        )
+
+        return redirect('blog', slug=slug)
+
+    comments = Comments.objects.filter(blogs=single_post).order_by('-created_at')
+
+    context = {
+        'single_post': single_post,
+        'comments': comments,
+        'comment_count': comments.count(),
+        'categories': Category.objects.annotate(post_count=Count('blogs')),
+    }
+
+    return render(request, 'blog_main/blogs.html', context)
+
+
 
 from django.shortcuts import render
 from django.db.models import Q
