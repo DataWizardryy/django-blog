@@ -102,9 +102,19 @@ def login_view(request):
 
     if request.method == 'POST' and form.is_valid():
         auth.login(request, form.get_user())
+
+        # Get the next URL if it exists
+        next_url = request.POST.get('next')
+
+        if next_url:
+            return redirect(next_url)
+
         return redirect('dashboard')
 
-    return render(request, 'blog_main/login.html', {'form': form})
+    return render(request, 'blog_main/login.html', {
+        'form': form,
+        'next': request.GET.get('next', '')
+    })
 
 def logout(request):
     auth.logout(request)
