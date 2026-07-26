@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, redirect, get_object_or_404
 
+from sideBar.models import About
 from .forms import RegistrationForm
 from .models import Blogs, Category, Comments
 from django.db.models import Count
@@ -36,6 +37,10 @@ def blogs(request, slug):
         )
 
         return redirect('blog', slug=slug)
+    try:
+        about = About.objects.get()
+    except:
+        about = None
 
     comments = Comments.objects.filter(blogs=single_post).order_by('-created_at')
 
@@ -43,6 +48,7 @@ def blogs(request, slug):
         'single_post': single_post,
         'comments': comments,
         'comment_count': comments.count(),
+        'about': about,
         'categories': Category.objects.annotate(post_count=Count('blogs')),
     }
 

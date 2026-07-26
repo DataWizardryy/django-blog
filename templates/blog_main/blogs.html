@@ -2,229 +2,503 @@
 
 {% block content %}
 
-<div class="container py-5">
+<div class="container py-4">
+
     <div class="row">
 
-        <!-- Blog Post -->
+        <!-- ===================== BLOG CONTENT ===================== -->
+
         <div class="col-lg-8">
+
+            <!-- Breadcrumb -->
+
+            <nav aria-label="breadcrumb">
+
+                <ol class="breadcrumb bg-white px-0">
+
+                    <li class="breadcrumb-item">
+
+                        <a href="{% url 'home' %}">
+                            Home
+                        </a>
+
+                    </li>
+
+                    <li class="breadcrumb-item">
+
+                        <a href="{% url 'category' single_post.category.id %}">
+
+                            {{ single_post.category }}
+
+                        </a>
+
+                    </li>
+
+                    <li class="breadcrumb-item active">
+
+                        {{ single_post.title|truncatewords:6 }}
+
+                    </li>
+
+                </ol>
+
+            </nav>
 
             <article class="bg-white">
 
-                <!-- Post Header -->
-                <header class="mb-4">
-                    <h1 class="fw-bold">{{ single_post.title }}</h1>
+                <!-- Category -->
 
-                    <div class="text-muted small mb-3">
-                        Posted on {{ single_post.created_at|date:"F d, Y" }}
-                        by <strong>{{ single_post.author }}</strong>
-                    </div>
+                <span class="badge badge-warning mb-3">
 
-                    <span class="badge bg-primary">
-                        {{ single_post.category }}
-                    </span>
-                </header>
+                    {{ single_post.category }}
+
+                </span>
+
+                <!-- Title -->
+
+                <h1 class="display-4 font-weight-bold">
+
+                    {{ single_post.title }}
+
+                </h1>
+
+                <!-- Meta -->
+
+                <div class="text-muted mb-4">
+
+                    <i class="bi bi-calendar3"></i>
+
+                    {{ single_post.created_at|date:"F d, Y" }}
+
+                    &nbsp;&nbsp;
+
+                    <i class="bi bi-person"></i>
+
+                    {{ single_post.author }}
+
+                    &nbsp;&nbsp;
+
+                    <i class="bi bi-chat-left-text"></i>
+
+                    {{ comment_count }} Comment{{ comment_count|pluralize }}
+
+                </div>
 
                 <!-- Featured Image -->
+
                 {% if single_post.featured_image %}
-                <figure class="mb-3">
-                    <img
-                        src="{{ single_post.featured_image.url }}"
-                        alt="{{ single_post.title }}"
-                        class="img-fluid rounded w-100 shadow-sm"
-                        style="height:450px; object-fit:cover;"
-                    >
-                </figure>
+
+                <img
+                    src="{{ single_post.featured_image.url }}"
+                    alt="{{ single_post.title }}"
+                    class="img-fluid rounded shadow-sm mb-4 w-100"
+                    style="
+                        height:45vh;
+                        min-height:260px;
+                        max-height:500px;
+                        object-fit:cover;
+                    ">
+
                 {% endif %}
 
                 <!-- Short Description -->
-                <p class="lead text-muted">
+
+                <p class="lead text-secondary">
+
                     {{ single_post.short_description }}
+
                 </p>
 
-                <!-- Blog Body -->
-                <div class="fs-5 lh-lg mb-5">
+                <!-- Body -->
+
+                <div style="
+                        font-size:1.1rem;
+                        line-height:1.9;
+                        text-align:justify;
+                    ">
+
                     {{ single_post.blog_body|linebreaks }}
+
+                </div>
+
+                <hr class="my-5">
+
+                <!-- Share -->
+
+                <h5 class="mb-3">
+
+                    Share this article
+
+                </h5>
+
+                <div class="mb-5">
+
+                    <a href="#"
+                       class="btn btn-primary btn-sm mr-2">
+
+                        <i class="bi bi-facebook"></i>
+
+                        Facebook
+
+                    </a>
+
+                    <a href="#"
+                       class="btn btn-info btn-sm mr-2">
+
+                        <i class="bi bi-twitter-x"></i>
+
+                        X
+
+                    </a>
+
+                    <a href="#"
+                       class="btn btn-success btn-sm mr-2">
+
+                        <i class="bi bi-whatsapp"></i>
+
+                        WhatsApp
+
+                    </a>
+
+                    <a href="#"
+                       class="btn btn-secondary btn-sm">
+
+                        <i class="bi bi-linkedin"></i>
+
+                        LinkedIn
+
+                    </a>
+
                 </div>
 
                 <hr>
 
+
                 <!-- Comments -->
-                <h4 class="mb-3">
-                    Comments ({{ comment_count }})
-                </h4>
+              <!-- ================= COMMENTS ================= -->
 
-                {% if comments %}
+<h4 class="mb-4">
 
-                    {% for comment in comments %}
-                    <div class="card mb-3 border-0 shadow-sm">
-                        <div class="card-body">
+    Comments ({{ comment_count }})
 
-                            <p class="mb-2">
-                                {{ comment.comment }}
-                            </p>
+</h4>
 
-                            <small class="text-muted mb-0">
-                                <strong>By {{ comment.user.username }}</strong>
-                                |
-                                {{ comment.created_at|timesince }} ago
-                            </small>
+{% if comments %}
 
-                        </div>
-                    </div>
-                    {% endfor %}
+    {% for comment in comments %}
 
-                {% else %}
+    <div class="card shadow-sm border-0 mb-3">
 
-                    <div class="alert alert-light border">
-                        No comments yet. Be the first to comment!
-                    </div>
+        <div class="card-body">
 
-                {% endif %}
+            <p class="mb-2">
 
-                <hr class="my-4">
+                {{ comment.comment }}
 
-                <!-- Leave Comment -->
-                <h5 class="mb-2">Leave a Comment</h5>
+            </p>
 
-                {% if user.is_authenticated %}
+            <small class="text-muted">
 
-                <form method="POST">
-                    {% csrf_token %}
+                <i class="bi bi-person-circle"></i>
 
-                    <div class="mb-2">
-                        <textarea
-                            name="comment"
-                            class="form-control"
-                            rows="5"
-                            placeholder="Write your comment..."
-                            required
-                        ></textarea>
-                    </div>
+                <strong>{{ comment.user.username }}</strong>
 
-                    <button type="submit" class="btn btn-primary">
-                        <i class="bi bi-chat-left-text"></i>
-                        Post Comment
-                    </button>
-                </form>
+                &nbsp;
 
-                {% else %}
+                <i class="bi bi-clock"></i>
 
-                <div class="alert alert-info shadow-sm">
+                {{ comment.created_at|timesince }} ago
 
-                    <h6 class="fw-bold mb-2">
-                        Login Required
-                    </h6>
-
-                    <p class="mb-3">
-                        You need to be logged in before you can leave a comment.
-                    </p>
-
-                    <a href="{% url 'login' %}?next={{ request.path }}"
-                       class="btn btn-primary">
-                        Login
-                    </a>
-
-                    <a href="{% url 'register' %}"
-                       class="btn btn-outline-secondary ms-2">
-                        Create Account
-                    </a>
-
-                </div>
-
-                {% endif %}
-
-            </article>
-
-        </div>
-
-        <!-- Sidebar -->
-        <div class="col-lg-4">
-
-            <!-- Search -->
-            <div class="card mb-4 shadow-sm">
-
-                <div class="card-header fw-semibold">
-                    Search
-                </div>
-
-                <div class="card-body">
-
-                    <form action="{% url 'search' %}" method="GET">
-
-                        <div class="input-group">
-
-                            <input
-                                type="text"
-                                name="keyword"
-                                class="form-control"
-                                placeholder="Search articles..."
-                                value="{{ keyword|default:'' }}"
-                            >
-
-                            <button class="btn btn-primary" type="submit">
-                                Search
-                            </button>
-
-                        </div>
-
-                    </form>
-
-                </div>
-
-            </div>
-
-            <!-- Categories -->
-            <div class="card shadow-sm">
-
-                <div class="card-header fw-semibold">
-                    Categories
-                </div>
-
-                <div class="card-body">
-
-                    <ul class="list-unstyled mb-0">
-
-                        {% for cat in categories %}
-                        <li class="mb-2">
-                            <a
-                                href="{% url 'category' cat.id %}"
-                                class="text-decoration-none"
-                            >
-                                {{ cat.category_name }}({{ cat.post_count }})
-                            </a>
-                        </li>
-
-                        {% empty %}
-
-                        <li class="text-muted">
-                            No categories available.
-                        </li>
-
-                        {% endfor %}
-
-                    </ul>
-
-                </div>
-
-            </div>
-            <aside class="col-md-4 blog-sidebar">
-                <div class="p-3 mb-3 bg-light rounded">
-                    <h4>{{ about.about_heading }}</h4>
-                    <p>{{ about.about_description }}</p>
-                </div>
-                <div class="p-3">
-                    <h4>Follow Us</h4>
-                    <ol class="list-unstyled">
-                        <li><a href="#">GitHub</a></li>
-                        <li><a href="#">LinkedIn</a></li>
-                    </ol>
-                </div>
-
-            </aside>
+            </small>
 
         </div>
 
     </div>
+
+    {% endfor %}
+
+{% else %}
+
+<div class="alert alert-light border">
+
+    No comments yet.
+
+    Be the first to start the discussion.
+
 </div>
 
+{% endif %}
+
+
+<hr class="my-5">
+
+<!-- ================= COMMENT FORM ================= -->
+
+<div class="card shadow-sm border-0 mb-5">
+
+    <div class="card-header bg-warning text-dark">
+
+        <strong>
+
+            Leave a Comment
+
+        </strong>
+
+    </div>
+
+    <div class="card-body">
+
+        {% if user.is_authenticated %}
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <div class="form-group">
+
+                <textarea
+                    class="form-control"
+                    name="comment"
+                    rows="5"
+                    placeholder="Share your thoughts..."
+                    required></textarea>
+
+            </div>
+
+            <button
+                class="btn btn-warning">
+
+                <i class="bi bi-chat-left-text"></i>
+
+                Post Comment
+
+            </button>
+
+        </form>
+
+        {% else %}
+
+        <div class="text-center py-4">
+
+            <i class="bi bi-lock"
+               style="font-size:60px;color:#999;"></i>
+
+            <h5 class="mt-3">
+
+                Login Required
+
+            </h5>
+
+            <p>
+
+                Please login before leaving a comment.
+
+            </p>
+
+            <a href="{% url 'login' %}?next={{ request.path }}"
+               class="btn btn-warning">
+
+                Login
+
+            </a>
+
+            <a href="{% url 'register' %}"
+               class="btn btn-outline-secondary ml-2">
+
+                Register
+
+            </a>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+<!-- ================= PREVIOUS/NEXT ================= -->
+
+<div class="row mb-5">
+
+    <div class="col-6">
+
+        {% if previous_post %}
+
+        <a href="{% url 'blog' previous_post.slug %}"
+           class="btn btn-outline-secondary">
+
+            ← Previous
+
+        </a>
+
+        {% endif %}
+
+    </div>
+
+    <div class="col-6 text-right">
+
+        {% if next_post %}
+
+        <a href="{% url 'blog' next_post.slug %}"
+           class="btn btn-outline-secondary">
+
+            Next →
+
+        </a>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+<!-- ================= RELATED POSTS ================= -->
+
+{% if related_posts %}
+
+<h3 class="mb-4">
+
+    Related Articles
+
+</h3>
+
+<div class="row">
+
+{% for post in related_posts %}
+
+<div class="col-md-4 mb-4">
+
+    <div class="card h-100 shadow-sm border-0">
+
+        {% if post.featured_image %}
+
+        <img
+            src="{{ post.featured_image.url }}"
+            class="card-img-top"
+            style="
+                height:180px;
+                object-fit:cover;
+            ">
+
+        {% endif %}
+
+        <div class="card-body">
+
+            <h6>
+
+                <a href="{% url 'blog' post.slug %}"
+                   class="text-dark text-decoration-none">
+
+                    {{ post.title|truncatewords:8 }}
+
+                </a>
+
+            </h6>
+
+            <small class="text-muted">
+
+                {{ post.created_at|timesince }} ago
+
+            </small>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+{% endif %}
+
+</article>
+
+</div>
+
+<!-- ================= SIDEBAR ================= -->
+
+<div class="col-lg-4">
+    <div style="position: sticky; top: 20px;">
+
+        <!-- Categories -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header">
+                <strong>
+                    Categories
+                </strong>
+            </div>
+
+            <ul class="list-group list-group-flush">
+                {% for cat in categories %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+
+                    <a href="{% url 'category' cat.id %}">
+                        {{ cat.category_name }}
+                    </a>
+
+                    <span class="badge badge-warning">
+                        {{ cat.post_count }}
+                    </span>
+
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+
+        <!-- About -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header">
+                <strong>
+                    About
+                </strong>
+            </div>
+
+            <div class="card-body">
+                <p>
+                    {{ about.about_description }}
+                </p>
+
+            </div>
+        </div>
+
+
+        <!-- Follow -->
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <strong>
+                    Follow Us
+                </strong>
+            </div>
+
+            <div class="card-body">
+
+                <a href="#"
+                   class="btn btn-outline-dark btn-sm mr-2">
+                    <i class="bi bi-facebook"></i>
+                </a>
+
+                <a href="#"
+                   class="btn btn-outline-dark btn-sm mr-2">
+                    <i class="bi bi-twitter-x"></i>
+                </a>
+
+                <a href="#"
+                   class="btn btn-outline-dark btn-sm mr-2">
+                    <i class="bi bi-linkedin"></i>
+                </a>
+
+                <a href="#"
+                   class="btn btn-outline-dark btn-sm">
+                    <i class="bi bi-whatsapp"></i>
+                </a>
+
+            </div>
+        </div>
+
+    </div>
+</div>
 {% endblock %}

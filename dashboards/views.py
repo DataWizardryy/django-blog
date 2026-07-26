@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from .forms import CategoryForm, PostForm, UserForm, EditUserForm
 
 
-# Create your views here.
+
 @login_required(login_url='login')
 def dashboard_view(request):
     category_count = Category.objects.all().count()
