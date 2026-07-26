@@ -42,6 +42,22 @@ share/python-wheels/
 *.egg
 MANIFEST
 
+# Django virtual environment
+myvenv/
+
+# Django media uploads
+media/
+
+# Python cache files
+__pycache__/
+*.pyc
+
+# Django database
+db.sqlite3
+
+# Environment variables
+.env
+
 # PyInstaller
 #  Usually these files are written by a python script from a template
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
@@ -138,6 +154,8 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+
+static/admin/
 
 # Spyder project settings
 .spyderproject
