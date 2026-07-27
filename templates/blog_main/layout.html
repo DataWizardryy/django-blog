@@ -12,7 +12,7 @@
 
     <!-- Bootstrap -->
     <link rel="stylesheet"
-          href="https://getbootstrap.com/docs/4.0/dist/css/bootstrap.min.css">
+          href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900"
@@ -30,17 +30,13 @@
           href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <style>
-        /* Push content down so it isn't hidden behind the fixed header */
-
-        body {
-            padding-top: 150px; /* mobile: header wraps to 2 rows, taller */
-        }
-
-        @media (min-width: 768px) {
-            body {
-                padding-top: 140px; /* desktop: header fits on 1 row */
-            }
-        }
+        /*
+            sticky-top keeps the header in normal document flow while
+            still sticking to the viewport on scroll, so content below
+            it is never hidden regardless of how tall the header grows
+            on mobile (e.g. when it wraps to multiple rows).
+            No manual padding-top offsets needed anymore.
+        */
 
         .fixed-header-wrap {
             background-color: #fff;
@@ -52,9 +48,9 @@
 
 <body>
 
-<!-- ================= FIXED HEADER + NAVBAR ================= -->
+<!-- ================= STICKY HEADER + NAVBAR ================= -->
 
-<div class="fixed-top fixed-header-wrap">
+<div class="sticky-top fixed-header-wrap">
 
     <div class="container">
 
