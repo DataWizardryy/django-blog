@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.contrib import auth
+from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.defaultfilters import slugify
 from django.contrib.auth.decorators import permission_required
@@ -12,13 +13,20 @@ from .forms import CategoryForm, PostForm, UserForm, EditUserForm
 
 @login_required(login_url='login')
 def dashboard_view(request):
+
+    # Prevent users without assigned roles from accessing dashboard
+    if not request.user.groups.exists():
+        messages.warning(request, "Your account has not been assigned a role yet.")
+        return redirect('home')
+
     category_count = Category.objects.all().count()
     blogs_count = Blogs.objects.all().count()
 
-    context ={
+    context = {
         'category_count': category_count,
         'blogs_count': blogs_count
     }
+
     return render(request, 'dashboard/dashboard.html', context)
 
 
