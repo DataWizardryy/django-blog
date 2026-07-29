@@ -10,7 +10,7 @@ def home(request):
     try:
         about = About.objects.get()
     except:
-        about = none
+        about = None
 
     context ={
         'featured_posts': featured_posts,
